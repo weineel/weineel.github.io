@@ -1,0 +1,36 @@
+language: node_js
+node_js: stable
+
+# Travis-CI Caching
+cache:
+  directories:
+    - node_modules
+
+
+# S: Build Lifecycle
+install:
+  - npm install
+
+before_script:
+  - npm install -g hexo
+
+script:
+  - hexo generate
+
+after_script:
+  - cd public
+  - git init
+  - git config user.name "weineel"
+  - git config user.email "LiJF_wn@163.com"
+  - git add .
+  - git commit -m "Update docs"
+  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master
+# E: Build LifeCycle
+
+branches:
+  only:
+    - src
+env:
+ global:
+   - GH_REF: github.com/weineel/weineel.github.io.git
+   - secure: ""
