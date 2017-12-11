@@ -33,5 +33,5 @@ branches:
 env:
  global:
    - GH_REF: github.com/weineel/weineel.github.io.git
-   // 设置一个加密的环境变量，GH_TOKEN环境变量的值
+   # 设置一个加密的环境变量，GH_TOKEN环境变量的值
    - secure: "L9d3YA5QZCSOoUliEIsNyjBlmEWiNnuKuLA5/XbpEacuj5F04Aic2pxkUXWzhj42CcTStChwzF3MACBmfaOlqeygUEQ32I158DIihnF8wvCSY4gALyFGpIzRmehvkjeSfAXiERfrx1IJNoy30Ea220I5cpcyIHFVBWViguDImxLGACzW/T8NiQV8+ZU4/ML3IvuVUng/7zWn/yLrITQUJTyynh8Vxtys9elDSuMBRwa26ZWljPr2KUrvQGPg0J9PwOleIPfCzLVsGdelJuzVHA9rTzhaA47EVweCl+SvFwG57rRD0EtJqkq547MuGaYGgLTBMhJlGNBe9d6nx0AcfhCbSEYB//E4xCwpV/BzjfWBBPSUtvIaDdu2IYXx2ACiq+xrd5LQnPsIDb6/ZDyUjFllSofNI8l4bQlmCNkS++DL0f+lYmCxdW3ZMy6dGNu81cVX3RcBvDa4/BszdLAK4owO0ROAXHIGEtvdJJg6KfmIUpI6EMjeZBLLRwclrjVaMm/mSdjCIgDNLbzbehthGzQyd+rbaa2m74jhAd2GxiRdEqE37F+78mEUW+OQ2BkEOXGwTGfhDVHsD0JlPLx1dIIBv/eZqcZiKcJIRrdKutsEsh7t2Ft5M8luWHeyrE5bcay/hEIH8J5rP0KAnwPwapxfQ3rUOJl8WGDzy8JDvN0="
