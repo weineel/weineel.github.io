@@ -9,3 +9,8 @@ tags: github
 1. 在某个项目中开启使用ng-graph分支做项目文档的设置。
 1. master分支`/docs`作为文档目录。
 1. 项目master分支README.md编译成单页的github pages，`https://username.github.io/project-name`。
+
+# 参考
+* [User, Organization, and Project Pages](https://help.github.com/articles/user-organization-and-project-pages/)
+* [Configuring a publishing source for GitHub Pages](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/)
+* [使用 Travis CI 自动更新 GitHub Pages](http://notes.iissnan.com/2016/publishing-github-pages-with-travis-ci/)

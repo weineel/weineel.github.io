@@ -24,7 +24,7 @@ after_script:
   - git config user.email "LiJF_wn@163.com"
   - git add .
   - git commit -m "Update docs"
-  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master
+  - git push --force "https://${GH_TOKEN}@${GH_REF}" master
 # E: Build LifeCycle
 
 branches:
@@ -33,4 +33,4 @@ branches:
 env:
  global:
    - GH_REF: github.com/weineel/weineel.github.io.git
-   - secure: ""
+   - secure: "RlrSzRU7UyBVcuAGyOL+vywjwciyMAcjRQoGnKc+7a+7VoKTbySlIV5VSqYlQ9Je4jwK7FnMdc2NP2/1h/6zctb/Bcp1CWJKrCw8ZDRXnz2/b36d6Zo8w6+1DkMVuPRIKMZKlcCHtf0Y1bME+nVfVKkpKActD+TQJgpaNdeiDLfJ3VT+o74bf27dbmBoOipL6jzrZ5XA3FBV7OC3TZUJkmc2PogFGRxhb4e/UATbf+K+GQj0ZTWY8BMw6VRLB4IkHiTIfLtk/Z+I8jlHnFaJksFpk5NT0GMOSSWulFnM6NKJFkIacvR+EQpWfGx4pzuVsrgdrWwkL457bfQHcbKQt7Pz48TNi/KSPNbEwlKg3TgFiRSY8Eh38nHOv+1EE7WKZZM962K8VW3lZr/8z2FWpCMi9FgbhzS5mKvBtKS9ebCfsX/2ot5//yfpnDSSTqwDDgJmldLn7aeemk4x9Fha1H3X3ecz75OvN2UV2Ba0IaaqfiLxYJOyxWPkDCYjmC0J33cfWOBAlwXxIkxnkJ6B7wbcj+qR3J+2AdD5kSHez65aK42aP0HBb69l5Mj4NJCZThAFC2l+3bOWXNCJZumWF04QMkvQNPSv7f5Ix+dAB0AgNyNvLP4EN6QcQzW85tQfgWQsiwMTBHOMGE+g37c/gaHk1cS+vr3hADmc5c2KJUM="
