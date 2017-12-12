@@ -8,7 +8,7 @@ tags: github hexo
 
 1. 搜索
 1. tags
-1. 评论，gitment
+1. 评论，[gitment](https://imsun.net/posts/gitment-introduction/)
 1. RSS，`npm install hexo-generator-feed --save` 就可以了。
 
 <!-- more -->
