@@ -2,6 +2,7 @@
 title: Github Pages 四种形式，以及每种方式使用travis进行持续集成的方案。
 date: 2017-12-11 16:21:07
 tags: github hexo
+categories: tutorial
 ---
 
 1. 个人主页，使用`username.github.io`作为项目名的仓库。
