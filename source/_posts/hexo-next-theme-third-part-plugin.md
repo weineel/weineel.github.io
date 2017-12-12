@@ -6,10 +6,11 @@ tags: github hexo
 
 # 实现功能
 
-1. 搜索
+1. 搜索, [Local search](https://github.com/flashlab/hexo-generator-search)
 1. tags
 1. 评论，[gitment](https://imsun.net/posts/gitment-introduction/)
 1. RSS，`npm install hexo-generator-feed --save` 就可以了。
+1. 阅读次数统计, LeanCloud
 
 <!-- more -->
 
