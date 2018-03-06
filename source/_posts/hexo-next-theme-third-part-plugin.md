@@ -1,7 +1,10 @@
 ---
 title: hexo 使用next主题配置第三方插件
 date: 2017-12-11 18:46:37
-tags: github hexo
+tags:
+    - github
+    - hexo
+categories: tutorial
 ---
 
 # 实现功能
