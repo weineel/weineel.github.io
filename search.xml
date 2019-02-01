@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[hexo 使用next主题配置第三方插件]]></title>
+    <url>%2F2017%2F12%2F11%2Fhexo-next-theme-third-part-plugin%2F</url>
+    <content type="text"><![CDATA[实现功能 搜索, Local search tags 评论，gitment RSS，npm install hexo-generator-feed --save 就可以了。 阅读次数统计, LeanCloud 参考 2个小时教你hexo博客添加评论、打赏、RSS等功能 Gitment：使用 GitHub Issues 搭建评论系统]]></content>
+      <categories>
+        <category>tutorial</category>
+      </categories>
+      <tags>
+        <tag>github</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Github Pages 四种形式，以及每种方式使用travis进行持续集成的方案。]]></title>
+    <url>%2F2017%2F12%2F11%2Fgithub-pages-zero2hero%2F</url>
+    <content type="text"><![CDATA[个人主页，使用username.github.io作为项目名的仓库。 在某个项目中开启使用ng-graph分支做项目文档的设置。 master分支/docs作为文档目录。 项目master分支README.md编译成单页的github pages，https://username.github.io/project-name。 参考 User, Organization, and Project Pages Configuring a publishing source for GitHub Pages 使用 Travis CI 自动更新 GitHub Pages]]></content>
+      <categories>
+        <category>tutorial</category>
+      </categories>
+      <tags>
+        <tag>github</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[log4j配置示例, 资料汇总]]></title>
+    <url>%2F2017%2F11%2F09%2Fjava-log4j-config%2F</url>
+    <content type="text"><![CDATA[日志是一个很庞大的话题，有机会要仔细研究下。 配置示例log4j1.2.1712345678910111213141516171819202122232425262728293031323334# log4j.properties# debug, D, C, E：第一个是日志输出级别，后面都是输出目的地log4j.rootLogger = debug, D, C, E### console ###log4j.appender.C = org.apache.log4j.ConsoleAppenderlog4j.appender.C.Target = System.outlog4j.appender.C.layout = org.apache.log4j.PatternLayoutlog4j.appender.C.layout.ConversionPattern = [financeTown-web][%p] [%-d&#123;yyyy-MM-dd HH:mm:ss&#125;] %C.%M(%L) | %m%nlog4j.appender.C.file.encoding=UTF-8### log file ###log4j.appender.D = org.apache.log4j.DailyRollingFileAppenderlog4j.appender.D.Append = true# 对使用这个appender的日志二次过滤。log4j.appender.D.Threshold = DEBUGlog4j.appender.D.layout = org.apache.log4j.PatternLayoutlog4j.appender.D.layout.ConversionPattern = [financeTown-web][%p] [%-d&#123;yyyy-MM-dd HH:mm:ss&#125;] %C.%M(%L) | %m%nlog4j.appender.D.file.encoding=UTF-8log4j.appender.D.File = ../logs/financeTown-web# 按日期每天一个日志，当天是日志文件名为没有日期的文件名，会在后一天另存为追加为有以下日期格式的文件。log4j.appender.D.DatePattern=&apos;-&apos;yyyy-MM-dd.&apos;log&apos;# 每分钟生成一个log文件# log4j.appender.D.DatePattern=&apos;-&apos;yyyy-MM-dd-HH-mm.&apos;log&apos;### exception ###log4j.appender.E = org.apache.log4j.DailyRollingFileAppenderlog4j.appender.E.Append = truelog4j.appender.E.Threshold = ERRORlog4j.appender.E.layout = org.apache.log4j.PatternLayoutlog4j.appender.E.layout.ConversionPattern = [financeTown-web][%p] [%-d&#123;yyyy-MM-dd HH:mm:ss&#125;] %C.%M(%L) | %m%nlog4j.appender.E.file.encoding=UTF-8log4j.appender.E.File = ../logs/financeTown-web_errorlog4j.appender.E.DatePattern=&apos;-&apos;yyyy-MM-dd.&apos;log&apos; 参考项目原因，研究了下log4j，之前只是用已有的配置，没有自己配置过。以下是我参考的一些文章。 java常用日志库，概括了java日志发展的历史，值得一看，但是主要讲了Slf4j，算是篇软文。 apache 官方 Log4j1.2配置详解 配置日志文件相对路径 log4j框架logger的继承关系以及使用场景]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>log4j</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[关于git reset 的总结]]></title>
+    <url>%2F2017%2F10%2F27%2Fgit-reset%2F</url>
+    <content type="text"><![CDATA[git reset／revert 就是程序员的后悔药。主要总结了reset，懂了reset自然就懂了revert(更安全的reset，后悔药的后悔药)，但是git reset 会有更干净的commit路径。 常用格式 git reset [option] [commit] //重制指定提交，可以具体指定到文件，否则就是所有文件。 12# 重置前一次提交的filename.java，会丢弃所有修改没有任何保留。git reset --hard head^ filename.java git reset head [file list] // 重制为当前提交，一般用于重制暂存区到工作区。 git reset head^ // 重制到当前提交的前次提交 git reset head~n // 重制到当前提交的前n此提交，即在这次提交之后提交都删除, head^ 相当于head~1 git reset [commit-hash/tag name] // 可以指定提交的hash值或者tag名 选项详解options: 如果会把重置的内容放到哪个位置，哪个位置就不能有和重置内容相同的文件。 --mixed // 重置提交和暂存区，即所有被重置的提交(和暂存区)的修改都放到工作区, 默认选项。在可能情况下不会影响工作区原有内容。 --soft // 重置提交, 即被重置的提交的修改放到暂存区。在可能情况下不会影响暂存区和工作区原有内容。 --hard // 重置提交, 暂存区，工作区。将丢失所有被重置的修改。 --merge // 保留工作区，直接丢弃暂存区的修改，丢弃所有重置的提交 。。 --keep // 保留工作区，把暂存区的内容放到工作区(两个区中不能有相同的文件)，丢弃所有重置的提交。]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[chrome 和 微信开发者工具 跨域]]></title>
+    <url>%2F2017%2F10%2F17%2Fcross-domain%2F</url>
+    <content type="text"><![CDATA[mac 和 windos平台下，chrome和微信开发者工具的跨域，跨域主要是为了在开发阶段调用接口。 Mac 平台要先完全退出chrome或微信开发者工具后执行。有可能需要尝试多次才能起作用。一般会提示 你使用的是不受支持的命令标记 --disable-web-security chrome1open -a /Applications/Google\ Chrome.app --args --disable-web-security --user-data-dir 微信开发者工具不同版本的微信开发者工具在/Applications下的名字可能不同，根据实际情况修改命令行。 1open -a /Applications/wechatwebdevtools.app --args --disable-web-security --user-data-dir Windowschrome 新建一个目录，例如: C:\path\to\ChromeUserData，可以根据自己的习惯创建。 新建一个能打开chrome的快捷方式，右击快捷方式，选择属性，弹出属性窗口。 在快捷方式选项卡下的目标输入框中追加上--disable-web-security --user-data-dir=C:\path\to\ChromeUserData 点击应用和确定按钮关闭属性窗口，双击这个快捷方式，并打开chrome，查看是否有你使用的是不受支持的命令标记 --disable-web-security的提示。 微信开发者工具对比chrom的操作执行。 警告所有操作要在完全退出chrome或微信开发者工具后操作。 参考 微信开发者工具 跨域问题 chrome浏览器的跨域设置——包括版本49前后两种设置]]></content>
+      <categories>
+        <category>tutorial</category>
+      </categories>
+      <tags>
+        <tag>跨域</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[在idea上使用docker作为java的开发环境]]></title>
+    <url>%2F2017%2F09%2F28%2Fdocker-java-dev%2F</url>
+    <content type="text"><![CDATA[准备，开发环境使用的MacOS, windows 和 Linux理论上差异不大。 idea 2017.2, docker integration 3.0.1 安装idea插件 Docker integration 3.0.1 安装docker for Mac 和 docker-compose (一般使用pip或brew安装) 在idea中指定docker-compose的目录。 123# 安装完成docker-compose查看可执行文件目录which docker-compose# /usr/local/bin/docker-compose 在idea中打开 IntelliJ IDEA &gt; Preferences &gt; Build, Execution, Deployment &gt; Docker &gt; Tools. 在Docker Compose executable 中配置/usr/local/bin/docker-compose 安装方法自行百度或Google，文章结尾有部分参考。 配置连接本地docker daemon 配置 连接 配置连接远程docker daemon 在服务器上配置可以远程连接的docker daemon 远程登录到安装docker的服务器，编辑文件 /etc/docker/daemon.json, 在json最外层加上 &quot;hosts&quot;:[&quot;tcp://0.0.0.0:2375&quot;,&quot;unix:///var/run/docker.sock&quot;],， 类似下面的结构。 12345# 0.0.0.0表示任意IP的主机都可以访问，安全起见 0.0.0.0 改成允许访问的IP。&#123; &quot;hosts&quot;:[&quot;tcp://0.0.0.0:2375&quot;,&quot;unix:///var/run/docker.sock&quot;], &quot;registry-mirrors&quot;: [&quot;https://ftichs.mirror.aliyuncs.com&quot;]&#125; 防火墙开启 2375 端口 12firewall-cmd --zone=public --add-port=2375/tcp --permanenfirewall-cmd --reload 重启docker，systemctl restart docker 在本地机器(外网ip必须是daemon.json配置的IP)测试，docker -H server_ip:2375 images 配置 idea，和配置本地基本一样。 连接和连接本地docker一样。 编写一个配置文件，部署应用 要先有一个docker-compose.yml/Dockerfile/docker镜像。任意一个都行，看你想用什么方式部署了。下面用docker-compose做实例。 1234567version: &apos;3.1&apos;services: tomcat: image: tomcat:7.0.81-jre8 ports: - &quot;8088:8080&quot; 配置，使用docker-compose就可以忽略Container选项卡了。 运行(部署) 部署成功后访问 http://localhost:8088查看效果。可以通过编写Dockerfile(在docker-compose.yml中引用Dockerfile编译镜像)把java应用部署到docker 容器。 idea配置远程调试, 调试部署到docker中的应用下面是不使用docker时的远程调试 Intellij IDEA 配置Tomcat远程调试 Debugging a Java app in a container 参考 idea 官方文档 ubuntu+docker+docker-compose+intellij idea 部署java web项目 IDEA使用docker进行调试 从零开始使用Docker构建Java Web开发运行环境 centos docker环境搭建 docker 配置外网访问 Debugging a Java app in a container]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>docker</tag>
+        <tag>idea</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python 爬虫在 docker 中的应用实战]]></title>
+    <url>%2F2017%2F09%2F07%2Fdocker-python-spider%2F</url>
+    <content type="text"><![CDATA[使用 docker 统一开发、测试、发布环境。示例项目地址。 docker 的在线和离线安装 在线安装 centos docker环境搭建 离线安装 官网下载对应平台的安装包。 核心概念 镜像，类似于虚拟机/操作系统镜像，可以理解为面向Docker引擎的只读模版。是创建docker容器的基础，可以看作面向对象中的类。 容器，通过镜像创建的一个实例，类似于一个轻量级的沙箱，或者说是一个已经启动的操作系统。Docker使用容器来运行和隔离应用。可以看作面向对象中的对象。 仓库，可以看作代码库(如果是java，可以看作是maven或者gradle的仓库)。是Docker集中存放镜像文件的地方。 基本使用(对比git)，mac和windows都有相应的图形界面。 镜像拉取: docker pull imagename:tag 从镜像运行容器（镜像不存在时会自动pull，任务结束后容器就会自动停止）: docker run --rm -v /var/code:/root/code -p 8080:80 --name=example imagename:tag --rm 和 -d 不能同时使用 交互式运行容器中的指定程序（容器要处于运行状态）: docker exec -it example bash 启动和停止容器: docker start/stop example 从容器中复制文件或目录: docker copy 数据卷(Data Volumes)管理 数据卷的使用，类似Linux下对目录或文件进行mount操作。 创建默认数据卷 12# 只能是rw模式，会分配一个默认的VolumesName(hash值)，容器被删除时会自动删除数据卷docker run -v /test_py --name=test_python --rm -it python:2.7.12 bash 容器中的 /test_py 目录会被持久化在 /var/lib/docker/volumes/VolumesName (可以使用docker volume inspect 命令查看)中。 Mac下无法直接查看 /var/lib/docker 到，需要在这个模式下 screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty 查看，具体可以查看这里。 给数据卷挂载宿主主机的目录或文件 123# 容器被删除时不会删除数据卷docker run -v ~/project/pythonProject/test_py:/code:rw --name=test_python --rm -it python:2.7.12 bashdocker run -v ~/project/pythonProject/test_py/helloworld.py:/code/helloworld.py:ro --name=test_python --rm -it python:2.7.12 bash 命名数据卷的使用，使用这个数据卷的容器被删除时不会删除数据卷 网络管理 默认情况下，在容器外部是无法通过网络来访问容器内的网络应用和服务的。通过 -p 参数来指定端口映射。 1docker run -p ip:hostport:containerport imagename 实例 12# ip一般省略为127.0.0.1, 访问宿主主机的8080端口相当于访问容器的80端口docker run -p 8080:80 imagename 实战–搭建基于docker的scrapy开发和发布环境。 示例项目地址 使用Dockerfile构建一个python scrapy爬虫的镜像，可以直接通过docker build -t scrapyd-dev:1.0.0 .命令构建镜像，最终会使用docker-compose来实现。 12345678910111213141516171819202122232425262728293031# Dockerfile# Author: weineelFROM python:2.7.13MAINTAINER weineel LiJF_wn@163.comWORKDIR /var/code# COPY/ADD(可以是一个压缩包，会自动解压)COPY ./etc/pip.conf /root/.pip/pip.confCOPY ./etc/scrapyd.conf /etc/scrapyd/scrapyd.confRUN pip install --no-cache-dir scrapy scrapyd# 定义编译指令# 在编译时通过 docker build --build-arg _TZ=Asia/Shanghai,_TC=weiguo -t test_python:1.0.0 . 方式指定，# 可以用在run等指令中，做分支判断ARG _TZ=Asia/ShanghaiARG _TC# 在启动容器是 -e 指定环境变量，会覆盖编译时赋的值。ENV TZ $_TZENV TC $_TCVOLUME /var/codeEXPOSE 6800# ENTRYPOINT [&quot;/bin/bash&quot;]# ENTRYPOINT 和 CMD的区别# 相当于开机启动项，container在启动时执行CMD [&quot;scrapyd&quot;, &quot;--pidfile=&quot;] 使用docker-compose管理docker 123456789101112131415161718192021222324# docker-compose.ymlversion: &apos;3.1&apos;services: scrapyd: build: context: ./scrapyd dockerfile: $&#123;ScrapydDockerfileName&#125; ports: - &quot;6800:6800&quot; volumes: - ./scrapyd_data:/var/lib/scrapyd - ../:/var/code # depends_on: # - splash # links: # - splash restart: always splash: image: scrapinghub/splash ports: - &quot;8050:8050&quot; 构建步骤, 以下命令在项目根目录中的docker目录下执行 初始项目目录结构 docker-compose up scrapyd 启动容器。 docker-compose exec scrapyd bash 进入容器(相当于远程登录的服务器)，容器中安装了scrapy包，可以执行scrapy的命令行工具等，因为把项目根目录挂在到了容器的/var/code 所以在容器中的/var/code目录下的内容和项目根目录一致的。 scrapy startproject myproject 创建爬虫项目，此命令是在容器中执行的，注意观察命令行提示符。 scrapy genspider gjfgw http://www.ndrc.gov.cn 创建爬虫 接下来就是快乐的写爬虫了scrapy。 参考 docker技术入门与实战]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>python</tag>
+        <tag>spider</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python 中文编码问题总结 -- str 和 unicode]]></title>
+    <url>%2F2017%2F08%2F16%2Fpython-coding%2F</url>
+    <content type="text"><![CDATA[术语 unicode 是通用码（原始码）一个字符对应一个整数, 但不是程序数据。具体的怎么编码和存储由不同版本的UTF定义。 UTF（Unicode Transformation Format）：是针对unicode变长编码设计的一种前缀吗，根据前缀可判断是几个字节表示一个字符。定义了unicode 定义的数字怎么转换成程序数据(实际使用和存储的数据)。常用的用utf-8，utf-16 codec: 编码解码器，根据不同的字符集执行编码解码。 python2 关于文件开头的 # -*- coding: utf-8 -*-。 这个是指定当前python代码文件的编码方式，python2默认是ascii。这个决定了python解释器用什么编码解释代码文件。 字符串的两种形式，str(字节序列)和unicode(用某种编码格式解码字节序列形成的字符串)，str更底层所以unicode到str的转换是encode(编码)。 str 是通过wchar_t(宽字符，根据不容系统或编译方式长度不同)类型存储的，可以看作是字节流。console打印一个字符串，需要看console当前使用的编码格式。 encode: unicode对象调用，根据指定编码类型生成str类型(字节序列/宽字节序列)，str类型调用的话会先使用系统默认编码decode成unicode对象，然后再根据指定的编码encode，注意默认的一次decode. u.encode(&quot;utf-8&quot;) decode: str对象调用，根据制定的编码格式解码成unicode对象。 关于&#39;ascii&#39; codec can&#39;t decode byte 0xe5 in position 23: ordinal not in range(128) 经典错误。报这个错一般是因为uncode和str对象混用了，在使用默认的ascii codec转换时导致的错误。 使用unicode的建议，主要是为了避免混用： 程序中出现字符串时一定要加一个前缀u。 不要用str()函数，用Unicode()代替 不要用过时的string模块。如果传给它非ASCII码，它会把一切搞砸。 不到必须时不要在你的程序里编解码Unicode字符，只在你要写入文件或者数据库或者网络时，才调用encode()函数和decode()函数。 使用什么字符编码，就要采用对应的字符集进行解码。 python3 使用byte表示字节序列 使用str表示unicode。所以一般不会遇到编码问题。 参考资料 百度百科 python中的应用 python decode encode 中文报错/乱码 python2 和 python3的主要区别]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>unicode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[centos docker环境搭建]]></title>
+    <url>%2F2017%2F08%2F15%2Fcentos-install-docker%2F</url>
+    <content type="text"><![CDATA[概述基于centos搭建docker部署或开发环境。使用docker-compose实现单机的容器集群。 步骤 更换yum源参考: Ali-OSM-CentOS centos7 修改yum源为阿里源安装pip，python的包管理工具 更新yum缓存，安装python-pip包 123yum update -y# 如果没找到包，执行yum -y install epel-release 然后再次执行一次。yum install python-pip 更换pip镜像源到阿里，新建~/.pip/pip.conf: 1234567mkdir ~/.piptee ~/.pip/pip.conf &lt;&lt;-&apos;EOF&apos;[global]index-url = http://mirrors.aliyun.com/pypi/simple/[install]trusted-host=mirrors.aliyun.comEOF 升级pip: pip install --upgrade pip 安装docker-compose1pip install docker-compose 安装并启动docker 使用阿里云提供的docker安装方式 i. 登录阿里docker平台-管理中心 ii. 点击Docker Hub 镜像站点根据系统版本和提示进行安装和修改registry镜像源。 直接去官网下载安装包，或者yum安装，为了下载docker镜像快一点，registry的镜像源还是要换一下的。 使用阿里云的安装步骤 i. 安装：curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/internet | sh - ii. 使用Docker加速器（修改registry 镜像源） 1234567sudo mkdir -p /etc/dockersudo tee /etc/docker/daemon.json &lt;&lt;-&apos;EOF&apos;&#123; &quot;registry-mirrors&quot;: [&quot;获取的专属加速地址&quot;]&#125;EOFsudo systemctl daemon-reload iii. 启动docker： sudo systemctl restart docker iv. 测试： 命令：docker -v 输出：Docker version 17.05.0-ce, build 89658be 设置docker开机启动: systemctl enable docker 容器自动重启: 1docker run --restart=always imagename 以上所有操作都是用的root用户。。。待续: mac下 docker化开发参考 CentOS7下安装python-pip centos7 修改yum源为阿里源 Ali-OSM-CentOS centos7安装docker并设置开机启动]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[docker 容器中使用 crontab]]></title>
+    <url>%2F2017%2F08%2F01%2Fdocker-crontab%2F</url>
+    <content type="text"><![CDATA[docker 中使用crontab 相关命令 使用 python:2.7.13 镜像，是基于buildpack-deps:jessie镜像的，是一个Debian系统。 docker中使用cron执行python脚本时: 1sys.path = [&apos;/var/code/XHTSpider/XHTSpider/es&apos;, &apos;/usr/lib/python2.7&apos;, &apos;/usr/lib/python2.7/plat-x86_64-linux-gnu&apos;, &apos;/usr/lib/python2.7/lib-tk&apos;, &apos;/usr/lib/python2.7/lib-old&apos;, &apos;/usr/lib/python2.7/lib-dynload&apos;, &apos;/usr/local/lib/python2.7/dist-packages&apos;, &apos;/usr/lib/python2.7/dist-packages&apos;] 在直接使用python命令执行脚本时 1sys.path = [&apos;/var/code/XHTSpider/XHTSpider/es&apos;, &apos;/usr/local/lib/python27.zip&apos;, &apos;/usr/local/lib/python2.7&apos;, &apos;/usr/local/lib/python2.7/plat-linux2&apos;, &apos;/usr/local/lib/python2.7/lib-tk&apos;, &apos;/usr/local/lib/python2.7/lib-old&apos;, &apos;/usr/local/lib/python2.7/lib-dynload&apos;, &apos;/usr/local/lib/python2.7/site-packages&apos;] 注意 dite-packages 和 site-packages。然而在使用pip安装包时，是安装在site-packages下的，所以在要在要执行的脚本开始部分加上 12import syssys.path.append(&quot;/usr/local/lib/python2.7/site-packages&quot;) 这可能和docker容器的用户管理有关，执行cron的用户环境变量的不同。 debian 中 crontab 程序叫 cron，服务名也是cron，不同系统的使用方式会有所不同。 123service cron start/stop/restart/reload/status# 直接启动cron Dockerfile1234567891011121314FROM python:2.7.13WORKDIR /rootCOPY ./etc/apt.sources.list /etc/apt/sources.listRUN apt-get update -y &amp;&amp; \ apt-get install -y cron &amp;&amp; \ touch /var/log/cron.logADD ./etc/crontab /etc/cron.d/crontab# tail 可以防止容器自动退出运行CMD cron &amp;&amp; tail -f /var/log/cron.log 相关文件 ./etc/apt.sources.list apt-get 使用阿里云源 123456deb http://mirrors.aliyun.com/debian wheezy main contrib non-freedeb-src http://mirrors.aliyun.com/debian wheezy main contrib non-freedeb http://mirrors.aliyun.com/debian wheezy-updates main contrib non-freedeb-src http://mirrors.aliyun.com/debian wheezy-updates main contrib non-freedeb http://mirrors.aliyun.com/debian-security wheezy/updates main contrib non-freedeb-src http://mirrors.aliyun.com/debian-security wheezy/updates main contrib non-free ./etc/crontab 1*/1 * * * * root echo $(date) &gt;&gt; /var/log/cron.log 2&gt;&amp;1 参考 docker下计划任务crontab的使用方法 crontab 使用 Running cron within a docker debian:jessie container Linux crontab定时执行任务 命令格式与详细例子 apt-get安装源替换 阿里云源 Python 安装路径， dist-packages 和 site-packages 区别]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>crontab</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[javascript 变量提升]]></title>
+    <url>%2F2017%2F07%2F04%2Fjs-scope-v%2F</url>
+    <content type="text"><![CDATA[源代码1234567891011121314console.log(x); // undefined// console.log(y); // 这个会报为定义的错误f(); // f 是个函数，函数定义也提升，函数定义就是定义实现，所以f是可以调用的(f不是通过赋值获得的引用)。// f1(); // 会报 undefined 不是一个函数的错误，因为f1是一个函数类型的变量(不管什么类型他也是个变量)，定义提升了，所以f1的值是undefinedvar x = 3;function f()&#123; console.log("ffff");&#125;var f1 = function() &#123; console.log("f111"); &#125;; 效果等同12345678910111213141516var x;function f()&#123; console.log(&quot;ffff&quot;);&#125;var f1;console.log(x); // undefined// console.log(y);f(); // f1();x = 3;f1 = function() &#123; console.log(&quot;f111&quot;); &#125;; 总结 变量定义提升，只提升定义，不会初始化值 函数定义时，直接进行函数定义函数可以调用，变量赋值的方式定义函数会报错。]]></content>
+      <categories>
+        <category>javascript</category>
+      </categories>
+      <tags>
+        <tag>javascript</tag>
+        <tag>scope</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[jQuery 中 ajax 使用 FormData 上传多个Base64或文件(File)]]></title>
+    <url>%2F2017%2F06%2F16%2Fajax-formdata%2F</url>
+    <content type="text"><![CDATA[1. base64(字符串)作为数据源（在前端生成的文件而非选择的文件）。前端调用上传接口示例 1234567891011121314151617181920212223242526272829303132333435// 图片分组上传，images，subjectTypeImages 为图片转的base64数组，titles是字符串数组。var formData = new FormData();images.forEach(function (image) &#123; formData.append("picture[]", image);&#125;);subjectTypeImages.forEach(function (image) &#123; formData.append("subjectTypeImages[]", image);&#125;);subjectStatusImages.forEach(function (image) &#123; formData.append("subjectStatusImages[]", image);&#125;);titles.forEach(function (image) &#123; formData.append("titles[]", image);&#125;);// 而外的参数数据formData.append("titleKey", titleKey);formData.append("searchType", searchType);$.ajax(&#123; url:'upload.do', method:'POST', data:formData, // 默认为true，设为false后直到ajax请求结束(调完回掉函数)后才会执行$.ajax(...)后面的代码 async: false, // 下面三个，因为直接使用FormData作为数据，contentType会自动设置，也不需要jquery做进一步的数据处理(序列化)。 cache: false, contentType: false, processData: false, success:function(data)&#123; console.log(data); &#125;, error:function(error)&#123; console.log(error.message); &#125;&#125;); java(springMVC) 后端接收示例12345678910111213141516171819@ResponseBody@RequestMapping(value = "upload.do", method = RequestMethod.POST)public Object upload(HttpServletRequest request) throws Exception &#123; CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext()); // 先判断request中是否包涵multipart类型的数据， if (multipartResolver.isMultipart(request)) &#123; MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request; String[] picture = multiRequest.getParameterValues("picture[]"); String[] subjectTypeImages = multiRequest.getParameterValues("subjectTypeImages[]"); String[] subjectStatusImages = multiRequest.getParameterValues("subjectStatusImages[]"); String[] titles = multiRequest.getParameterValues("titles[]"); String searchType = multiRequest.getParameter("searchType"); String titleKey = multiRequest.getParameter("titleKey"); // todo: any-thing &#125; return "success";&#125; 2. form 表单中使用input 选择文件上传， File类型form 表单123456789&lt;form id="form111" enctype="multipart/form-data" method="post" action="#"&gt; &lt;input type="file" name="files"&gt; &lt;input type="file" name="files"&gt; &lt;input type="file" name="files"&gt; &lt;!-- 这个可以选择多个文件，而且只可以选图片 --&gt; &lt;input type="file" name="files" accept="image/*" multiple&gt; &lt;input type="text" name="username"&gt; &lt;input type="button" id="btn"&gt;&lt;/form&gt; javascript 上传接口调用示例123456789101112131415161718192021222324252627$("#btn").click(function () &#123; // 获取所有文件 // 1. 使用直接使用form表单获取，会获取所有input值 var fomdata = new FormData(document.getElementById("form111")); // 2. 只获取文件 var fomdata = new FormData(); $("#form111").children("input[name='files']").each(function (index, input) &#123; for(var i=0; i&lt;input.files.length; i++) &#123; fomdata.append("files", input.files[i]); &#125; &#125;); $.ajax(&#123; method:'POST', data:formData, url:'upload.do', // async: false, // 同步上传，默认(true)异步 cache: false, contentType: false, processData: false, success:function(data)&#123; console.log(data); &#125;, error:function()&#123; console.log('上传失败'); &#125; &#125;);&#125;); java(springMVC) 后端代码示例123456@ResponseBody@RequestMapping(value = "upload.do", method = RequestMethod.POST)public Object upload(MultipartFile[] files/* files 为input的name，这样就可以获取所有文件的数组了。*/, String filename, HttpServletRequest request) throws Exception &#123; // 遍历数组保存文件，并把文件相对路径存到数据库。。。等。 return "success";&#125; 推荐一个前端上传组件 webuploader java 后端代码示例 123456789101112131415161718192021@ResponseBody@RequestMapping(value = "upload.do", method = RequestMethod.POST)public Object uploadFile(MultipartFile file, String name1, HttpServletRequest request) throws Exception &#123; UploadDto uploadDto = new UploadDto(); // 就是一个格式化返回信息的类。 CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext()); // 先判断request中是否包涵multipart类型的数据， if (multipartResolver.isMultipart(request)) &#123; try &#123; // String fileId = service.saveFile(file); uploadDto.setMessage("上传成功!"); uploadDto.setCode(0); uploadDto.setFileId(fileId); &#125; catch (Exception e) &#123; e.printStackTrace(); uploadDto.setMessage("上传失败!"); uploadDto.setCode(-1); &#125; &#125; return uploadDto;&#125; 总结不同的上传方式需要配合不同的接收方式。同一个项目尽量使用同一套规范进行封装。这里使用ajax作为客户端上传，其它平台遵循http协议的情况下可以使用同一个上传接口。参考 廖雪峰javascript教程 Sending multipart/formdata with jQuery.ajax]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>ajax</tag>
+        <tag>formdata</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[使用 vimrc 配置 vim]]></title>
+    <url>%2F2017%2F02%2F26%2Fvim-vimrc%2F</url>
+    <content type="text"><![CDATA[配置vim github 地址 包含了详尽的安装的配置方法 123// Awesome 版本git clone https://github.com/amix/vimrc.git ~/.vim_runtimesh ~/.vim_runtime/install_awesome_vimrc.sh 123// 基础版本git clone git://github.com/amix/vimrc.git ~/.vim_runtimesh ~/.vim_runtime/install_basic_vimrc.sh 升级 12cd ~/.vim_runtimegit pull --rebase]]></content>
+      <categories>
+        <category>vim</category>
+      </categories>
+      <tags>
+        <tag>vim</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[更方便实用的shell：zsh]]></title>
+    <url>%2F2017%2F02%2F14%2Fshell-zsh%2F</url>
+    <content type="text"><![CDATA[mac 和 centos测试。 1. 安装zsh 查看是否安装zsh：cat /etc/shells, 如果已经安装了的话，就可以跳过2或3了。 RedHat / centos: sudo yum install zsh Debian / Ubuntu: sudo apt-get install zsh 修改默认使用的shell： 12chsh # 命令会提示输入要使用的shell程序名, 只能修改当前用户。chsh -s /bin/zsh # 直接指定shell 或者 1vi /etc/passwd #有管理员权限，修改任意用户的shell 或者 1useradd -s /bin/bash &#123;用户名&#125; # 创建用户时指定使用的shell 参考： Linux下安装终极Shell Zsh , mac下也一样 2. 配置oh-my-zsh github 安装oh-my-zsh： 在zsh下执行以下命令。 12# 手动安装（不推荐）。。。git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh 或者， 以下两个会自动初始化一些东西 1curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh 或者 1wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh 安装完成后重新打开shell。 更新： 12cd ~/.oh-my-zshgit pull --rebase 配置：在~/.zshrc 文件中配置主题和插件. 参考： Shell（一）：功能、配置和插件（附iTerm 2(for mac) &amp;&amp; Oh My Zsh教程）]]></content>
+      <categories>
+        <category>tutorial</category>
+      </categories>
+      <tags>
+        <tag>zsh</tag>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[使用ssl自签证书搭建 Nodejs https 服务器, 并采用 AFNetworking 调用示例接口]]></title>
+    <url>%2F2016%2F09%2F28%2Fssl-nodejs-https%2F</url>
+    <content type="text"><![CDATA[使用 openssl 生成证书openssl 说明: 使用 openssl 命令会把生成的证书输出到当前目录. 创建 CA 证书: 此证书是自签证书的根本, 创建了此证书相当于你自己就是第三方证书签发机构 (CA)了.生成步骤: 1234561. 生成 CA 秘钥 openssl genrsa -out ca-key.pem -des3 20482. 通过CA私钥生成CSR(证书请求文件) openssl req -new -key ca-key.pem -out ca-csr.pem3. 通过CSR文件和私钥生成CA证书(我理解为公钥, 包含了CA的信息) openssl x509 -req -in ca-csr.pem -signkey ca-key.pem -out ca-cert.pem 如果遇到权限问题 你需要root或者admin的权限 Unable to load config info from /user/local/ssl/openssl.cnf 对于这个问题，你可以从网上下载一份正确的openssl.cnf文件， 然后set OPENSSL_CONF=openssl.cnf文件的本地路径 创建服务器端证书: 此证书主要是在创建服务器时使用的, 在不同的认证方式中使用的证书不同, 下面会给出一些区别例子.在当前目录新建 openssl.cnf 文件模板:12345678910111213141516171819202122232425[req] distinguished_name = req_distinguished_name req_extensions = v3_req [req_distinguished_name] countryName = Country Name (2 letter code) countryName_default = CN stateOrProvinceName = State or Province Name (full name) stateOrProvinceName_default = BeiJing localityName = Locality Name (eg, city) localityName_default = YaYunCun organizationalUnitName = Organizational Unit Name (eg, section) organizationalUnitName_default = Domain Control Validated commonName = Internet Widgits Ltd commonName_max = 64 [ v3_req ] # Extensions to add to a certificate request basicConstraints = CA:FALSE keyUsage = nonRepudiation, digitalSignature, keyEncipherment subjectAltName = @alt_names [alt_names] #注意这个IP.1的设置，IP地址需要和你的服务器的监听地址一样 IP.1 = 127.0.0.1 生成步骤:1234561. 生成服务器秘钥 openssl genrsa -out server-key.pem 20482. 通过服务器私钥生成CSR(证书请求文件) openssl req -new -key server-key.pem -config openssl.cnf -out server-csr.pem3. 通过CSR文件和私钥以及CA证书生成服务器证书(我理解为公钥, 包含了 CA 证书,服务器信息(域名等..), 和服务器公钥) openssl x509 -req -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -in server-csr.pem -out server-cert.pem -extensions v3_req -extfile openssl.cnf 创建客户端证书: 此证书,在某些情况下可以不使用. 比如我们下面的 iOS 端使用 AFNetworking 调用接口的例子.生成步骤:123456生成客户端私钥 openssl genrsa -out client-key.pem生成CSR openssl req -new -key client-key.pem -out client-csr.pem生成客户端证书(我理解为公钥)openssl x509 -req -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -in client-csr.pem -out client-cert.pem 参考:HTTPS单向认证和双向认证 使用express框架创建 nodejs 服务器 安装express generator , 我使用的是4.13.4版本, nodejs 的版本为v5.11.1, npm 的版本为3.8.6npm install -g express-generator #必要时可能需要 sudo 安装完成后使用 express 命令,生成 express appexpress httpsapp #执行结束后会在当前目录下生成 nodejs 项目 httpsapp 安装依赖,测试项目创建是否成功 1234cd httpsappnpm install//執行npm start 在浏览器中打开http://localhost:3000查看是否启动成功. 在项目根目录下创建 ssl 文件夹, 并把刚刚生成的证书放到其中. 修改bin/www的代码, 把 http服务器改成 https 服务器以下是修改后的代码: 保证核心代码一样就行. 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960#!/usr/bin/env nodevar app = require(&apos;../app&apos;);var debug = require(&apos;debug&apos;)(&apos;httpsApp:server&apos;);// var http = require(&apos;http&apos;);var https = require(&apos;https&apos;);var fs = require(&apos;fs&apos;);var port = normalizePort(process.env.PORT || &apos;3000&apos;);app.set(&apos;port&apos;, port);/** * 创建 https 服务器*/// 获取证书var options = &#123; key: fs.readFileSync(&apos;./ssl/server-key.pem&apos;), ca: [fs.readFileSync(&apos;./ssl/ca-cert.pem&apos;)], cert: fs.readFileSync(&apos;./ssl/server-cert.pem&apos;)&#125;;var server = https.createServer(options, app).listen(app.get(&apos;port&apos;),&apos;127.0.0.1&apos;);server.listen(port);server.on(&apos;error&apos;, onError);server.on(&apos;listening&apos;, onListening);function normalizePort(val) &#123; var port = parseInt(val, 10); if (isNaN(port)) &#123; // named pipe return val; &#125; if (port &gt;= 0) &#123; // port number return port; &#125; return false;&#125;function onError(error) &#123; if (error.syscall !== &apos;listen&apos;) &#123; throw error; &#125; var bind = typeof port === &apos;string&apos; ? &apos;Pipe &apos; + port : &apos;Port &apos; + port; switch (error.code) &#123; case &apos;EACCES&apos;: console.error(bind + &apos; requires elevated privileges&apos;); process.exit(1); break; case &apos;EADDRINUSE&apos;: console.error(bind + &apos; is already in use&apos;); process.exit(1); break; default: throw error; &#125;&#125;function onListening() &#123; var addr = server.address(); var bind = typeof addr === &apos;string&apos; ? &apos;pipe &apos; + addr : &apos;port &apos; + addr.port; debug(&apos;Listening on &apos; + bind);&#125; 再次打开浏览器查看https://localhost:3000.如下图则服务器创建成功. 打开routs/users.js 文件(或者自己根据路由创建自己的测试接口)修改为:12345678910var express = require(&apos;express&apos;);var router = express.Router();/* GET users listing. */router.get(&apos;/&apos;, function(req, res, next) &#123; res.send(&#123; &quot;code&quot; : &quot;1100&quot;, &quot;message&quot; : &quot;test success&quot; &#125;);&#125;);module.exports = router; 这样就完成了一个简单的测试接口. 编写客户端代码测试接口是否可用.在任意目录创建文件 client.js内容为:12345678910111213141516171819202122232425var https = require(&apos;https&apos;);var fs = require(&apos;fs&apos;);var options = &#123; hostname:&apos;127.0.0.1&apos;, port:3000, path:&apos;/users&apos;, method:&apos;GET&apos;, key:fs.readFileSync(&apos;../ssl/client-key.pem&apos;), cert:fs.readFileSync(&apos;../ssl/client-cert.pem&apos;), ca: [fs.readFileSync(&apos;../ssl/ca-cert.pem&apos;)], agent:false&#125;;options.agent = new https.Agent(options);var req = https.request(options,function(res)&#123;console.log(&quot;statusCode: &quot;, res.statusCode); console.log(&quot;headers: &quot;, res.headers); res.setEncoding(&apos;utf-8&apos;); res.on(&apos;data&apos;,function(d)&#123; console.log(d); &#125;)&#125;);req.end();req.on(&apos;error&apos;,function(e)&#123; console.log(e);&#125;) 最后执行命令client.js``` 1234567891011121314151617181920返回结果为:![返回结果](http://upload-images.jianshu.io/upload_images/1855546-85c1a7cd5f7d6859.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)说明接口没有问题.## 以上过程, 可以参考 :[用Node.js创建自签名的HTTPS服务器](https://cnodejs.org/topic/54745ac22804a0997d38b32d)[Node.js - Express 4.x 使用 HTTPS/SSL](http://jade.logdown.com/posts/233332-nodejs-express-4x-using-https-ssl)************************************************在 iOS 端使用 AFNWorking 调用接口---------------------------------------------1. ** 在 iOS 中使用 https 需要注意 **首先必须要基于TLS 1.2版本协议。再来就是连接的加密方式要提供Forward Secrecy (这个不太懂)。最后就是证书至少要使用一个SHA256的指纹与任一个2048位或者更高位的RSA密钥，或者是256位或者更高位的ECC密钥。如果不符合其中一项，请求将被中断并返回nil。从我们生成证书的过程中也看到秘钥的长度是2048.2. ** 转换证书格式**此部分参考[使用openssl进行证书格式转换](http://blog.csdn.net/linda1000/article/details/8676330)其中 cer 和 der 是基本通用的,由于 AFNWorking 推荐使用 cer 类型的证书,所以我们可以使用一下命令把我们生成的 pem 证书转换成 cer.``` openssl x509 -outform der -in server-cert.pem -out server-cert.cer 基于AFNWorking 的验证方式我们只需要 server 的证书(公钥)就可以了. 把生成的 cer 证书拖到项目中. 使用一下代码条用接口查看返回数据 123456789101112131415161718//把服务端证书(需要转换成cer格式)放到APP项目资源里，AFSecurityPolicy会自动寻找根目录下所有cer文件 NSString *cerPath = [[NSBundle mainBundle] pathForResource:@&quot;server-cert&quot; ofType:@&quot;cer&quot;]; NSData *cerData = [NSData dataWithContentsOfFile:cerPath]; NSSet *cerSet = [[NSSet alloc] initWithObjects:cerData, nil]; AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey withPinnedCertificates:cerSet]; securityPolicy.allowInvalidCertificates = YES; securityPolicy.validatesDomainName = NO; AFHTTPSessionManager *manager = [AFHTTPSessionManager manager]; manager.requestSerializer = [AFHTTPRequestSerializer serializer]; manager.responseSerializer = [AFJSONResponseSerializer serializer]; // 这一步需要注意否者返回的数据可能是 NSData 需要自行转换成 json. manager.securityPolicy = securityPolicy; manager.responseSerializer.acceptableContentTypes=[NSSet setWithObjects:@&quot;application/json&quot;, @&quot;text/json&quot;, @&quot;text/javascript&quot;, @&quot;text/plain&quot;, nil];//关闭缓存避免干扰测试 manager.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData; [manager GET:@&quot;https://127.0.0.1:3000/users&quot; parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) &#123; DDLogDebug(@&quot;%@&quot;, responseObject); &#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123; DDLogError(@&quot;%@&quot;, error); &#125;]; 返回结果为 以上内容很多地方引用自iOS中AFNetworking HTTPS的使用]]></content>
+      <categories>
+        <category>https</category>
+      </categories>
+      <tags>
+        <tag>nodejs</tag>
+        <tag>ios</tag>
+        <tag>https</tag>
+      </tags>
+  </entry>
+</search>

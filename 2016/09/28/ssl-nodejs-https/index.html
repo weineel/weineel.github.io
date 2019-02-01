@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="nodejs,ios,https," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Weineel Sprinting" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="使用 openssl 生成证书openssl 说明: 使用 openssl 命令会把生成的证书输出到当前目录.">
+<meta name="keywords" content="nodejs,ios,https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用ssl自签证书搭建 Nodejs https 服务器, 并采用 AFNetworking 调用示例接口">
+<meta property="og:url" content="http://sprint.weineel.top/2016/09/28/ssl-nodejs-https/index.html">
+<meta property="og:site_name" content="Weineel Sprinting">
+<meta property="og:description" content="使用 openssl 生成证书openssl 说明: 使用 openssl 命令会把生成的证书输出到当前目录.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1855546-74f8590a2a6970e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1855546-e6b12047f1e49cf6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1855546-21d4033994d565a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-02-01T03:13:57.863Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用ssl自签证书搭建 Nodejs https 服务器, 并采用 AFNetworking 调用示例接口">
+<meta name="twitter:description" content="使用 openssl 生成证书openssl 说明: 使用 openssl 命令会把生成的证书输出到当前目录.">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1855546-74f8590a2a6970e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://sprint.weineel.top/2016/09/28/ssl-nodejs-https/"/>
+
+
+
+
+
+  <title>使用ssl自签证书搭建 Nodejs https 服务器, 并采用 AFNetworking 调用示例接口 | Weineel Sprinting</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Weineel Sprinting</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">weineel 的个人博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://sprint.weineel.top/2016/09/28/ssl-nodejs-https/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weineel lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Weineel Sprinting">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用ssl自签证书搭建 Nodejs https 服务器, 并采用 AFNetworking 调用示例接口</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-28T13:07:35+00:00">
+                2016-09-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/https/" itemprop="url" rel="index">
+                    <span itemprop="name">https</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/09/28/ssl-nodejs-https/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2016/09/28/ssl-nodejs-https/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2016/09/28/ssl-nodejs-https/" class="leancloud_visitors" data-flag-title="使用ssl自签证书搭建 Nodejs https 服务器, 并采用 AFNetworking 调用示例接口">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h2 id="使用-openssl-生成证书"><a href="#使用-openssl-生成证书" class="headerlink" title="使用 openssl 生成证书"></a>使用 openssl 生成证书</h2><p>openssl 说明: 使用 openssl 命令会把生成的证书输出到当前目录.</p>
+<a id="more"></a>
+<ol>
+<li>创建 CA 证书: 此证书是自签证书的根本, 创建了此证书相当于你自己就是第三方证书签发机构 (CA)了.<br>生成步骤:  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 生成 CA 秘钥   </span><br><span class="line">  openssl genrsa -out ca-key.pem -des3 2048</span><br><span class="line">2. 通过CA私钥生成CSR(证书请求文件)</span><br><span class="line">  openssl req -new -key ca-key.pem -out ca-csr.pem</span><br><span class="line">3. 通过CSR文件和私钥生成CA证书(我理解为公钥, 包含了CA的信息)</span><br><span class="line">  openssl x509 -req -in ca-csr.pem -signkey ca-key.pem -out ca-cert.pem</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="如果遇到权限问题"><a href="#如果遇到权限问题" class="headerlink" title="如果遇到权限问题"></a>如果遇到权限问题</h4><p>  你需要root或者admin的权限 Unable to load config info from /user/local/ssl/openssl.cnf 对于这个问题，你可以从网上下载一份正确的openssl.cnf文件， 然后set OPENSSL_CONF=openssl.cnf文件的本地路径</p>
+<ol>
+<li>创建服务器端证书: 此证书主要是在创建服务器时使用的, 在不同的认证方式中使用的证书不同, 下面会给出一些区别例子.<br>在当前目录新建 openssl.cnf 文件<br>模板:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[req]  </span><br><span class="line">    distinguished_name = req_distinguished_name  </span><br><span class="line">    req_extensions = v3_req  </span><br><span class="line">  </span><br><span class="line">    [req_distinguished_name]  </span><br><span class="line">    countryName = Country Name (2 letter code)  </span><br><span class="line">    countryName_default = CN  </span><br><span class="line">    stateOrProvinceName = State or Province Name (full name)  </span><br><span class="line">    stateOrProvinceName_default = BeiJing  </span><br><span class="line">    localityName = Locality Name (eg, city)  </span><br><span class="line">    localityName_default = YaYunCun  </span><br><span class="line">    organizationalUnitName  = Organizational Unit Name (eg, section)  </span><br><span class="line">    organizationalUnitName_default  = Domain Control Validated  </span><br><span class="line">    commonName = Internet Widgits Ltd  </span><br><span class="line">    commonName_max  = 64  </span><br><span class="line">  </span><br><span class="line">    [ v3_req ]  </span><br><span class="line">    # Extensions to add to a certificate request  </span><br><span class="line">    basicConstraints = CA:FALSE  </span><br><span class="line">    keyUsage = nonRepudiation, digitalSignature, keyEncipherment  </span><br><span class="line">    subjectAltName = @alt_names  </span><br><span class="line">  </span><br><span class="line">    [alt_names]  </span><br><span class="line">	#注意这个IP.1的设置，IP地址需要和你的服务器的监听地址一样</span><br><span class="line">    IP.1 = 127.0.0.1</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>生成步骤:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 生成服务器秘钥   </span><br><span class="line">  openssl genrsa -out server-key.pem 2048</span><br><span class="line">2. 通过服务器私钥生成CSR(证书请求文件)</span><br><span class="line">  openssl req -new -key server-key.pem -config openssl.cnf -out server-csr.pem</span><br><span class="line">3. 通过CSR文件和私钥以及CA证书生成服务器证书(我理解为公钥, 包含了 CA 证书,服务器信息(域名等..), 和服务器公钥)</span><br><span class="line">  openssl x509 -req -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -in server-csr.pem -out server-cert.pem -extensions v3_req -extfile openssl.cnf</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>创建客户端证书: 此证书,在某些情况下可以不使用. 比如我们下面的 iOS 端使用 AFNetworking 调用接口的例子.<br>生成步骤:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">生成客户端私钥</span><br><span class="line">  openssl genrsa -out client-key.pem</span><br><span class="line">生成CSR</span><br><span class="line">  openssl req -new -key client-key.pem -out client-csr.pem</span><br><span class="line">生成客户端证书(我理解为公钥)</span><br><span class="line">openssl x509 -req -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -in client-csr.pem -out client-cert.pem</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考:"></a>参考:</h3><p><a href="http://my.oschina.net/nearzk/blog/485652" target="_blank" rel="noopener">HTTPS单向认证和双向认证</a></p>
+<hr>
+<h2 id="使用express框架创建-nodejs-服务器"><a href="#使用express框架创建-nodejs-服务器" class="headerlink" title="使用express框架创建 nodejs 服务器"></a>使用express框架创建 nodejs 服务器</h2><ol>
+<li>安装express generator , 我使用的是4.13.4版本, nodejs 的版本为v5.11.1, npm 的版本为3.8.6<br><code>npm install -g express-generator #必要时可能需要 sudo</code></li>
+<li>安装完成后使用 express 命令,生成 express app<br><code>express httpsapp #执行结束后会在当前目录下生成 nodejs 项目 httpsapp</code></li>
+<li><p>安装依赖,测试项目创建是否成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd httpsapp</span><br><span class="line">npm install</span><br><span class="line">//執行</span><br><span class="line">npm start</span><br></pre></td></tr></table></figure>
+<p>在浏览器中打开<a href="http://localhost:3000/" target="_blank" rel="noopener">http://localhost:3000</a>查看是否启动成功.<br><img src="http://upload-images.jianshu.io/upload_images/1855546-74f8590a2a6970e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="启动成功返回的页面"></p>
+</li>
+<li><p>在项目根目录下创建 ssl 文件夹, 并把刚刚生成的证书放到其中.</p>
+</li>
+<li><p>修改bin/www的代码, 把 http服务器改成 https 服务器<br>以下是修改后的代码: 保证核心代码一样就行.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env node</span><br><span class="line">var app = require(&apos;../app&apos;);</span><br><span class="line">var debug = require(&apos;debug&apos;)(&apos;httpsApp:server&apos;);</span><br><span class="line">// var http = require(&apos;http&apos;);</span><br><span class="line">var https = require(&apos;https&apos;);</span><br><span class="line">var fs = require(&apos;fs&apos;);</span><br><span class="line">var port = normalizePort(process.env.PORT || &apos;3000&apos;);</span><br><span class="line">app.set(&apos;port&apos;, port);</span><br><span class="line">/**</span><br><span class="line"> * 创建 https 服务器</span><br><span class="line">*/</span><br><span class="line">// 获取证书</span><br><span class="line">var options = &#123;</span><br><span class="line">  key: fs.readFileSync(&apos;./ssl/server-key.pem&apos;),</span><br><span class="line">  ca: [fs.readFileSync(&apos;./ssl/ca-cert.pem&apos;)],</span><br><span class="line">  cert: fs.readFileSync(&apos;./ssl/server-cert.pem&apos;)</span><br><span class="line">&#125;;</span><br><span class="line">var server = https.createServer(options, app).listen(app.get(&apos;port&apos;),&apos;127.0.0.1&apos;);</span><br><span class="line">server.listen(port);</span><br><span class="line">server.on(&apos;error&apos;, onError);</span><br><span class="line">server.on(&apos;listening&apos;, onListening);</span><br><span class="line">function normalizePort(val) &#123;</span><br><span class="line">  var port = parseInt(val, 10);</span><br><span class="line">  if (isNaN(port)) &#123;</span><br><span class="line">    // named pipe</span><br><span class="line">    return val;</span><br><span class="line">  &#125;</span><br><span class="line">  if (port &gt;= 0) &#123;</span><br><span class="line">    // port number</span><br><span class="line">    return port;</span><br><span class="line">  &#125;</span><br><span class="line">  return false;</span><br><span class="line">&#125;</span><br><span class="line">function onError(error) &#123;</span><br><span class="line">  if (error.syscall !== &apos;listen&apos;) &#123;</span><br><span class="line">    throw error;</span><br><span class="line">  &#125;</span><br><span class="line">  var bind = typeof port === &apos;string&apos;</span><br><span class="line">    ? &apos;Pipe &apos; + port</span><br><span class="line">    : &apos;Port &apos; + port;</span><br><span class="line">  switch (error.code) &#123;</span><br><span class="line">    case &apos;EACCES&apos;:</span><br><span class="line">      console.error(bind + &apos; requires elevated privileges&apos;);</span><br><span class="line">      process.exit(1);</span><br><span class="line">      break;</span><br><span class="line">    case &apos;EADDRINUSE&apos;:</span><br><span class="line">      console.error(bind + &apos; is already in use&apos;);</span><br><span class="line">      process.exit(1);</span><br><span class="line">      break;</span><br><span class="line">    default:</span><br><span class="line">      throw error;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">function onListening() &#123;</span><br><span class="line">  var addr = server.address();</span><br><span class="line">  var bind = typeof addr === &apos;string&apos;</span><br><span class="line">    ? &apos;pipe &apos; + addr</span><br><span class="line">    : &apos;port &apos; + addr.port;</span><br><span class="line">  debug(&apos;Listening on &apos; + bind);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再次打开浏览器查看<a href="http://localhost:3000/" target="_blank" rel="noopener">https://localhost:3000</a>.如下图则服务器创建成功.</p>
+</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/1855546-e6b12047f1e49cf6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修改为 https 服务器后的页面"></p>
+<ol>
+<li>打开routs/users.js 文件(或者自己根据路由创建自己的测试接口)<br>修改为:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var express = require(&apos;express&apos;);</span><br><span class="line">var router = express.Router();</span><br><span class="line">/* GET users listing. */</span><br><span class="line">router.get(&apos;/&apos;, function(req, res, next) &#123;</span><br><span class="line">  res.send(&#123;</span><br><span class="line">  	&quot;code&quot; : &quot;1100&quot;,</span><br><span class="line">  	&quot;message&quot; : &quot;test success&quot;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">module.exports = router;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这样就完成了一个简单的测试接口.</p>
+<ol>
+<li>编写客户端代码测试接口是否可用.<br>在任意目录创建文件 client.js<br>内容为:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">var https = require(&apos;https&apos;);</span><br><span class="line">var fs = require(&apos;fs&apos;);</span><br><span class="line">var options = &#123;</span><br><span class="line">	hostname:&apos;127.0.0.1&apos;,</span><br><span class="line">	port:3000,</span><br><span class="line">	path:&apos;/users&apos;,</span><br><span class="line">	method:&apos;GET&apos;,</span><br><span class="line">	key:fs.readFileSync(&apos;../ssl/client-key.pem&apos;),</span><br><span class="line">	cert:fs.readFileSync(&apos;../ssl/client-cert.pem&apos;),</span><br><span class="line">	ca: [fs.readFileSync(&apos;../ssl/ca-cert.pem&apos;)],</span><br><span class="line">	agent:false</span><br><span class="line">&#125;;</span><br><span class="line">options.agent = new https.Agent(options);</span><br><span class="line">var req = https.request(options,function(res)&#123;</span><br><span class="line">console.log(&quot;statusCode: &quot;, res.statusCode);</span><br><span class="line">  console.log(&quot;headers: &quot;, res.headers);</span><br><span class="line">	res.setEncoding(&apos;utf-8&apos;);</span><br><span class="line">	res.on(&apos;data&apos;,function(d)&#123;</span><br><span class="line">		console.log(d);</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;);</span><br><span class="line">req.end();</span><br><span class="line">req.on(&apos;error&apos;,function(e)&#123;</span><br><span class="line">	console.log(e);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>最后执行命令<br><figure class="highlight plain"><figcaption><span>client.js``` </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">返回结果为:</span><br><span class="line">![返回结果](http://upload-images.jianshu.io/upload_images/1855546-85c1a7cd5f7d6859.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">说明接口没有问题.</span><br><span class="line"></span><br><span class="line">## 以上过程, 可以参考 :</span><br><span class="line">[用Node.js创建自签名的HTTPS服务器](https://cnodejs.org/topic/54745ac22804a0997d38b32d)</span><br><span class="line">[Node.js - Express 4.x 使用 HTTPS/SSL](http://jade.logdown.com/posts/233332-nodejs-express-4x-using-https-ssl)</span><br><span class="line"></span><br><span class="line">************************************************</span><br><span class="line">在 iOS 端使用 AFNWorking 调用接口</span><br><span class="line">---------------------------------------------</span><br><span class="line"></span><br><span class="line">1. ** 在 iOS 中使用 https 需要注意 **</span><br><span class="line">首先必须要基于TLS 1.2版本协议。再来就是连接的加密方式要提供Forward Secrecy (这个不太懂)。最后就是证书至少要使用一个SHA256的指纹与任一个2048位或者更高位的RSA密钥，或者是256位或者更高位的ECC密钥。如果不符合其中一项，请求将被中断并返回nil。从我们生成证书的过程中也看到秘钥的长度是2048.</span><br><span class="line"></span><br><span class="line">2. ** 转换证书格式**</span><br><span class="line">此部分参考[使用openssl进行证书格式转换](http://blog.csdn.net/linda1000/article/details/8676330)</span><br><span class="line">其中 cer 和 der 是基本通用的,由于 AFNWorking 推荐使用 cer 类型的证书,所以我们可以使用一下命令把我们生成的 pem 证书转换成 cer.</span><br><span class="line">``` </span><br><span class="line">openssl x509 -outform der -in server-cert.pem -out server-cert.cer</span><br></pre></td></tr></table></figure></p>
+<p>基于AFNWorking 的验证方式我们只需要 server 的证书(公钥)就可以了.</p>
+<ol>
+<li>把生成的 cer 证书拖到项目中.</li>
+<li><p>使用一下代码条用接口查看返回数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//把服务端证书(需要转换成cer格式)放到APP项目资源里，AFSecurityPolicy会自动寻找根目录下所有cer文件</span><br><span class="line">	NSString *cerPath = [[NSBundle mainBundle] pathForResource:@&quot;server-cert&quot; ofType:@&quot;cer&quot;];</span><br><span class="line">	NSData *cerData = [NSData dataWithContentsOfFile:cerPath];</span><br><span class="line">	NSSet *cerSet = [[NSSet alloc] initWithObjects:cerData, nil];</span><br><span class="line">	AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey withPinnedCertificates:cerSet];</span><br><span class="line">	securityPolicy.allowInvalidCertificates = YES;</span><br><span class="line">    securityPolicy.validatesDomainName = NO;</span><br><span class="line">    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];</span><br><span class="line">    manager.requestSerializer = [AFHTTPRequestSerializer serializer];</span><br><span class="line">    manager.responseSerializer = [AFJSONResponseSerializer serializer]; // 这一步需要注意否者返回的数据可能是 NSData 需要自行转换成 json.</span><br><span class="line">    manager.securityPolicy = securityPolicy;</span><br><span class="line">    manager.responseSerializer.acceptableContentTypes=[NSSet setWithObjects:@&quot;application/json&quot;, @&quot;text/json&quot;, @&quot;text/javascript&quot;, @&quot;text/plain&quot;, nil];</span><br><span class="line">//关闭缓存避免干扰测试</span><br><span class="line">    manager.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;	[manager GET:@&quot;https://127.0.0.1:3000/users&quot; parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) &#123;</span><br><span class="line">		DDLogDebug(@&quot;%@&quot;, responseObject);</span><br><span class="line">	&#125; failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) &#123;</span><br><span class="line">		DDLogError(@&quot;%@&quot;, error);</span><br><span class="line">	&#125;];</span><br></pre></td></tr></table></figure>
+<p>返回结果为</p>
+</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/1855546-21d4033994d565a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iOS 控制台返回结果"></p>
+<p>以上内容很多地方引用自<a href="http://www.jianshu.com/p/20d5fb4cd76d" target="_blank" rel="noopener">iOS中AFNetworking HTTPS的使用</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/ios/" rel="tag"># ios</a>
+          
+            <a href="/tags/https/" rel="tag"># https</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/14/shell-zsh/" rel="prev" title="更方便实用的shell：zsh">
+                更方便实用的shell：zsh <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">weineel lee</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/weineel" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-openssl-生成证书"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4F7F;&#x7528;-openssl-&#x751F;&#x6210;&#x8BC1;&#x4E66;" class="headerlink" title="&#x4F7F;&#x7528; openssl &#x751F;&#x6210;&#x8BC1;&#x4E66;"></a>&#x4F7F;&#x7528; openssl &#x751F;&#x6210;&#x8BC1;&#x4E66;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如果遇到权限问题"><span class="nav-number">1.0.1.</span> <span class="nav-text"><a href="#&#x5982;&#x679C;&#x9047;&#x5230;&#x6743;&#x9650;&#x95EE;&#x9898;" class="headerlink" title="&#x5982;&#x679C;&#x9047;&#x5230;&#x6743;&#x9650;&#x95EE;&#x9898;"></a>&#x5982;&#x679C;&#x9047;&#x5230;&#x6743;&#x9650;&#x95EE;&#x9898;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;:"></a>&#x53C2;&#x8003;:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用express框架创建-nodejs-服务器"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x4F7F;&#x7528;express&#x6846;&#x67B6;&#x521B;&#x5EFA;-nodejs-&#x670D;&#x52A1;&#x5668;" class="headerlink" title="&#x4F7F;&#x7528;express&#x6846;&#x67B6;&#x521B;&#x5EFA; nodejs &#x670D;&#x52A1;&#x5668;"></a>&#x4F7F;&#x7528;express&#x6846;&#x67B6;&#x521B;&#x5EFA; nodejs &#x670D;&#x52A1;&#x5668;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weineel lee</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'weineel',
+            repo: 'weineel.github.io.comment',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'fd2fd377fc86d26e38b0f2eb5620e4392e6b86c3',
+            
+                client_id: '59ea3331e5cb23bb388f'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("yNTMIrqoosHzdaHjEWpmSCVj-gzGzoHsz", "gaoQuK7IJofvhIn5gOofNuIa");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
